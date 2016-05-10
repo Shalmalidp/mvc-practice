@@ -4,14 +4,15 @@ import _ from 'lodash';
 
 //get our classes
 
-import{ TodoList } from './classes/todo';
-import { Task } from './classes/task';
+import{ TodoList } from './models/todo';
+import { Task } from './models/task';
+import { AppController } from './controllers/appController';
 
 //console.log(TodoList);//import check;
 //getting HTML Elements --JQUERY
 let todoForm  = $('.todoForm'); //<form>
-let todoInput = $('.todoInput'); // <input>
 let todos     = $('.todos'); // <ul>
+// let todoInput = $('.todoInput'); // <input> moved to controller
 
 
 //we need to model our todo list
@@ -20,31 +21,9 @@ let groceryList = new TodoList('Grocery List');
 //console.log('grocery list',groceryList);
 
 
-//Control how we add tasks
-
-todoForm.on('submit', function(event){
-  event.preventDefault(); 
-//get the text thats typed in the input field
-  let taskDesc = todoInput.val();
-  todoInput.val('');
-  //console.log(taskDesc);
-  
-  //update grocery list model to contain this item
-  let task = new Task(taskDesc);
-  groceryList.tasks.push(task);
-  console.log(groceryList);
-  
-  //visually show element on page
-  let taskHTML = taskTemplate(taskDesc);
-  todos.append(taskHTML);
-
-});
+let app = new AppController(todoForm, todos, groceryList);
+app.init();
 
 
-//template
-function taskTemplate(taskDesc){
-  return `
-    <li>${ taskDesc } </li>
-  `;
-}
+
 
